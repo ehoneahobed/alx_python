@@ -37,4 +37,4 @@ text_to_print = f"Employee {employee_name} is done with tasks({total_completed}/
 print(text_to_print)
 
 for item in titles_completed:
-    print(f"\t{item}")
+    print(f"\t {item}")
