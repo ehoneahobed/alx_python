@@ -1,6 +1,3 @@
-import requests
-import sys
-
 """
 - Get the user id from the command line argument
 - Access the API endpoint that gives you the details about a user and their todos
@@ -8,6 +5,10 @@ import sys
 - Count the total number of items that have the completed status to be true
 - Display the content the way it is displayed in the example on the intranet
 """
+
+import requests
+import sys
+
 
 employee_id = sys.argv[1]
 employee_details_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
