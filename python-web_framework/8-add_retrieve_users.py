@@ -44,6 +44,22 @@ create_tables()  # This calls the function to create tables
 def index():
     return "Hello, ALX Flask!"
 
+@app.route('/add_user', methods=['GET','POST'])
+def add_user():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        new_user = User(name=name, email=email)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash("User added successfully!")
+        except Exception as e:
+            flash(f"Error: {e}")
+        return redirect(url_for('users'))
+    
+    return render_template('add_user.html')
+
 # Update a User
 @app.route('/update_user/<int:user_id>', methods=['GET','POST'])
 def update_user(user_id):
@@ -52,9 +68,6 @@ def update_user(user_id):
         if user:
             name = request.form.get('name')
             email = request.form.get('email')
-            if not name or not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                flash("Invalid input.")
-                return redirect(url_for('index'))
             user.name = name
             user.email = email
             try:
