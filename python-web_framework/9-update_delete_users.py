@@ -60,11 +60,48 @@ def add_user():
     
     return render_template('add_user.html')
 
-
 @app.route('/users')
 def users():
     all_users = User.query.all()
     return render_template('users.html', users=all_users)
+
+# Update a User
+@app.route('/update_user/<int:user_id>', methods=['GET','POST'])
+def update_user(user_id):
+    user = User.query.get(user_id)
+    if request.method == 'POST':
+        if user:
+            name = request.form.get('name')
+            email = request.form.get('email')
+            user.name = name
+            user.email = email
+            try:
+                db.session.commit()
+                flash("User updated successfully!")
+            except Exception as e:
+                flash(f"Error: {e}")
+        else:
+            flash("User not found!")
+        return redirect(url_for('users'))
+    return render_template('update_user.html', user=user)
+
+# Delete a User
+@app.route('/delete_user/<int:user_id>', methods=['GET','POST'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if request.method == 'POST':
+        if user:
+            try:
+                db.session.delete(user)
+                db.session.commit()
+                flash("User deleted successfully!")
+            except Exception as e:
+                flash(f"Error: {e}")
+        else:
+            flash("User not found!")
+        return redirect(url_for('users'))
+
+    return render_template('delete_user.html', user=user)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
